@@ -1,11 +1,9 @@
 const EventEmitter = require('events').EventEmitter;
-const ClientManager = require('./ClientManager');
-const WebSocketManager = require('./websocket/WebSocketManager');
+const WebSocketManager = require('../websocket/WebSocketManager');
 
 class Client extends EventEmitter {
     constructor(options = {}) {
         super();
-           this.manager = new ClientManager(this);
 
            this.ws = new WebSocketManager(this);
         
