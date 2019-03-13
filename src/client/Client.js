@@ -15,13 +15,20 @@ class Client extends EventEmitter {
     get uptime() {
         return this.readyAt ? Date.now() - this.readyAt : null;    
     }
+
+    static destroy() {
+        this.ws.destroy();
+        this.token = null;
+      }
     
-    login(token) {
+    static login(token) {
           return new Promise((resolve, reject) => {
           if (!token || typeof token !== 'string') throw new Error('TOKEN_INVALID');
-          this.manager.connectToWebSocket(token, resolve, reject);
+          this.ws.connectToWebSocket(token, resolve, reject);
+          console.log("works");
         }).catch(e => {
           this.destroy();
+          console.log(e);
           return Promise.reject(e);
         });
     }

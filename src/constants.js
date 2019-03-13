@@ -11,7 +11,7 @@ exports.OPCodes = {
   INVALID_SESSION: 9,
   HELLO: 10,
   HEARTBACK_ACK: 11
-}:
+};
 
 exports.Events = {
   CHANNEL_CREATE: 'createChannel',

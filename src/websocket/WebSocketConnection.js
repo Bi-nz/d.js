@@ -1,6 +1,6 @@
 const EventEmitter = require('events');
 const WebSocket = require('./WebSocket');
-const { Status, Events } = require('../../utils/Constants');
+const { Status, Events } = require('../Constants');
 
 class WebSocketConnection extends EventEmitter {
   constructor(manager, gateway) {
