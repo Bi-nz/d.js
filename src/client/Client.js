@@ -14,9 +14,6 @@ class Client extends EventEmitter {
         // Gonna add more stuff here later
     }
 
-     test(msg) {
-        return this.emit(Events.DEBUG, msg);
-    }
     get uptime() {
         return this.readyAt ? Date.now() - this.readyAt : null;    
     }
