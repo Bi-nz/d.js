@@ -3,7 +3,8 @@ const WebSocket = require('./WebSocket');
 const { Status, Events } = require('../Constants');
 
 class WebSocketConnection extends EventEmitter {
-  constructor(manager, gateway) {
+    constructor(manager, gateway) {
+        super();
     this.manager = manager;
     
     this.gateway = gateway;
@@ -11,8 +12,6 @@ class WebSocketConnection extends EventEmitter {
     this.ws = null;
     
     this.client = manager.client;
-    
-    this.connect(gateway);
     
     this.status = Status.IDLE;
   }
@@ -50,7 +49,7 @@ class WebSocketConnection extends EventEmitter {
     }
     this.debug(`Connecting to ${gateway}`);
     const ws = this.ws = WebSocket.create(gateway);
-    this.status = Status.CONNECTING;
+      this.status = Status.CONNECTING;
     return true;
   }
 };
