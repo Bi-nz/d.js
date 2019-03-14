@@ -33,7 +33,7 @@ class WebSocketManager extends EventEmitter {
     
      destroy() {
         if (!this.connection) return this.debug('No connection to destroy.');
-        this.connection.destroy();
+        this.connection = null;
     }
 }
 
