@@ -2,7 +2,6 @@ const EventEmitter = require('events');
 const Events = require('../Constants').Events;
 const WebSocketManager = require('../websocket/WebSocketManager');
 const request = require('request-promise');
-const log = require('js-logs');
 const { endpoints } = require('../prefs');
 
 class Client extends EventEmitter {
