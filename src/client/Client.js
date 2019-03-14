@@ -2,6 +2,7 @@ const EventEmitter = require('events');
 const Events = require('../Constants').Events;
 const WebSocketManager = require('../websocket/WebSocketManager');
 const request = require('request-promise');
+const log = require('js-logs');
 const { endpoints } = require('../prefs');
 
 class Client extends EventEmitter {
@@ -14,6 +15,9 @@ class Client extends EventEmitter {
         // Gonna add more stuff here later
     }
 
+     test(msg) {
+        return this.emit(Events.DEBUG, msg);
+    }
     get uptime() {
         return this.readyAt ? Date.now() - this.readyAt : null;    
     }
@@ -25,11 +29,18 @@ class Client extends EventEmitter {
     
     async login(token) {
         if (!token || typeof token !== 'string') throw new Error('TOKEN_INVALID');
-        let res = await request(endpoints.gateway);
-        res = JSON.parse(res);
-        const gateway = res.url;
-        console.log(res.url)
-        this.ws.connect(gateway);
+        var res = await request(endpoints.gateway);
+        return new Promise((resolve, reject) => {
+            this.emit(Events.DEBUG, `Using token: ${token}`);
+            res = JSON.parse(res);
+            const gateway = res.url;
+            this.emit(Events.DEBUG, `Gateway: ${gateway}`);
+            this.ws.connect(gateway)
+        }).catch(e => {
+         this.destroy();
+          console.log(e);
+          return Promise.reject(e);
+        });
     }
 };
 
