@@ -1,6 +1,6 @@
-var client = require('../index').Client;
-var c = new client();
+var Djs = require('../index').Client;
+var client = new Djs();
 
-c.on('debug', console.log);
+client.on('debug', console.log);
 
-c.login('token');
+client.login('token');

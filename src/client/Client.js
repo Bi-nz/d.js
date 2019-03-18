@@ -1,15 +1,15 @@
 const EventEmitter = require('events');
 const Events = require('../Constants').Events;
-const WebSocketManager = require('../websocket/WebSocketManager');
+const WebSocket = require('../websocket/WebSocket');
 const requestp = require('request-promise');
 const request = require('request');
 const log = require('js-logs');
-const { endpoints } = require('../prefs');
+const { endpoints, gateway_v, ws } = require('../prefs');
 
 class Client extends EventEmitter {
     constructor(options = {}) {
         super();
-           this.ws = new WebSocketManager(this);
+           this.ws = WebSocket;
         
            this.readyAt = null;
         
@@ -37,7 +37,7 @@ class Client extends EventEmitter {
             res = JSON.parse(res);
             let gateway = res.url; 
             this.emit(Events.DEBUG, `Gateway: ${gateway}`);
-            gateway += '/v=6&encoding=json';
+            gateway += `/v=${gateway_v}&encoding=json`;
             this.ws.connect(gateway);
         }).catch(e => {
          this.destroy();
