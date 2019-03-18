@@ -1,7 +1,8 @@
 const EventEmitter = require('events');
 const Events = require('../Constants').Events;
 const WebSocketManager = require('../websocket/WebSocketManager');
-const request = require('request-promise');
+const requestp = require('request-promise');
+const request = require('request');
 const log = require('js-logs');
 const { endpoints } = require('../prefs');
 
@@ -29,19 +30,38 @@ class Client extends EventEmitter {
     
     async login(token) {
         if (!token || typeof token !== 'string') throw new Error('TOKEN_INVALID');
-        var res = await request(endpoints.gateway);
+        this.auth(token);
+        var res = await requestp(endpoints.gateway);
         return new Promise((resolve, reject) => {
             this.emit(Events.DEBUG, `Using token: ${token}`);
             res = JSON.parse(res);
             let gateway = res.url; 
             this.emit(Events.DEBUG, `Gateway: ${gateway}`);
-            gateway += 'v=6&encoding=json';
+            gateway += '/v=6&encoding=json';
             this.ws.connect(gateway);
         }).catch(e => {
          this.destroy();
           console.log(e);
           return Promise.reject(e);
         });
+    }
+
+    auth(token) {
+        request({
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bot ' + token,
+                'User-Agent': 'DiscordBot (DiscordBot, v1)'
+                //'grant_type': 'authorization_code'
+                //'Authorization': ''
+            },
+            url: endpoints.login,
+            method: 'POST',
+        }, function (err, res, body) {
+            var json = JSON.parse(body)
+            if (json.code !== undefined)
+                throw new Error(`TOKEN_INVALID`);
+        })
     }
 };
 

@@ -18,12 +18,12 @@ class WebSocketManager extends EventEmitter {
      connect(gateway) {
         if (!this.connection) {
           this.connection = new WebSocketConnection(this, gateway);
-          return true;
+          //return true;
          }
         switch (this.connection.status) {
             case Status.IDLE:
             case Status.DISCONNECTED:
-              this.connection.connect(gateway, 5500);
+                this.connection.connect(gateway, 5500);
               return true;
             default:
                 this.debug(`Could not connect to ${gateway} as the websocket is ${this.connection.status}`);

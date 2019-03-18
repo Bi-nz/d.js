@@ -1,4 +1,4 @@
-const gateway_v = exports.gateway_v = 6;
+const gateway_v = exports.gateway_v = 7;
 const api = exports.api = `https://discordapp.com/api/v${gateway_v}`;
 const Endpoints = exports.endpoints = {
     login: `${api}/auth/login`,
