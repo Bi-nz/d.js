@@ -1,4 +1,4 @@
-var client = require('./src/client/Client');
+var client = require('../index').Client;
 var c = new client();
 
 c.on('debug', console.log);
