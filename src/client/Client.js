@@ -9,15 +9,13 @@ const { endpoints, gateway_v, ws } = require('../prefs');
 class Client extends EventEmitter {
     constructor(options = {}) {
         super();
-           this.ws = WebSocket;
-        
-           this.readyAt = null;
-        
+        this.ws = WebSocket;
+        this.readyAt = null;
         // Gonna add more stuff here later
     }
 
      test(msg) {
-        return this.emit(Events.DEBUG, msg);
+        return this.emit(Events.DEBUG, `[DEBUG] ${msg}`);
     }
     get uptime() {
         return this.readyAt ? Date.now() - this.readyAt : null;    
@@ -30,19 +28,21 @@ class Client extends EventEmitter {
     
     async login(token) {
         if (!token || typeof token !== 'string') throw new Error('TOKEN_INVALID');
+		this.token = token;
         this.auth(token);
         var res = await requestp(endpoints.gateway);
         return new Promise((resolve, reject) => {
-            this.emit(Events.DEBUG, `Using token: ${token}`);
+            this.emit(Events.DEBUG, `[DEBUG] Using token: ${token}`);
             res = JSON.parse(res);
             let gateway = res.url; 
-            this.emit(Events.DEBUG, `Gateway: ${gateway}`);
+            this.emit(Events.DEBUG, `[DEBUG] Gateway: ${gateway}`);
             gateway += `/v=${gateway_v}&encoding=json`;
-            this.ws.connect(gateway);
+			this.ws = new WebSocket(this);
+			this.ws.connect();
         }).catch(e => {
-         this.destroy();
-          console.log(e);
-          return Promise.reject(e);
+        	this.destroy();
+          	console.log(e);
+          	return Promise.reject(e);
         });
     }
 
@@ -52,8 +52,6 @@ class Client extends EventEmitter {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bot ' + token,
                 'User-Agent': 'DiscordBot (DiscordBot, v1)'
-                //'grant_type': 'authorization_code'
-                //'Authorization': ''
             },
             url: endpoints.login,
             method: 'POST',
