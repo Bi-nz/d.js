@@ -10,3 +10,4 @@ client.once('ready', () => {
 });
 
 client.login('your token');
+
