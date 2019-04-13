@@ -98,9 +98,10 @@ class WebSocket extends EventEmitter {
 	async handlePacket(_packet) {
 		const packet = _packet.t;
 		this.client.emit('raw', _packet);
-        if (!require('fs').existsSync('./d.js/events')) require('fs').mkdirSync('./d.js/events')
+        // If you want to record the events, then uncomment line 102, 103 and 104
+        /*if (!require('fs').existsSync('./d.js/events')) require('fs').mkdirSync('./d.js/events')
         if (!require('fs').existsSync(`./d.js/events/${_packet.t}.json`))
-        require('fs').writeFileSync(`./d.js/events/${_packet.t}.json`, JSON.stringify(_packet, null, 2))
+        require('fs').writeFileSync(`./d.js/events/${_packet.t}.json`, JSON.stringify(_packet, null, 2))*/
         // This packet is emitted when the bot has successfully connected.
 		if (packet === 'READY') {
             this.client.guildCount = _packet.d.guilds.length;
