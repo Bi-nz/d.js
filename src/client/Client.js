@@ -11,39 +11,46 @@ class Client extends EventEmitter {
         super();
         this.ws = WebSocket;
         this.readyAt = null;
-        // Gonna add more stuff here later
+        this.guilds = {};
+        this.guildCount = 0;
+        this.channels = {};
+        this.channelCount = 0;
+        this.users = {};
+        this.userCount = 0;
     }
-
-     test(msg) {
+    test(msg) {
         return this.emit(Events.DEBUG, `[DEBUG] ${msg}`);
     }
-    get uptime() {
-        return this.readyAt ? Date.now() - this.readyAt : null;    
+    uptime() {
+        return this.readyAt ? Date.now() - this.readyAt : null;
     }
 
     destroy() {
-        this.ws.destroy();
         this.token = null;
       }
-    
     async login(token) {
-        if (!token || typeof token !== 'string') throw new Error('TOKEN_INVALID');
-		this.token = token;
-        this.auth(token);
-        var res = await requestp(endpoints.gateway);
-        return new Promise((resolve, reject) => {
-            this.emit(Events.DEBUG, `[DEBUG] Using token: ${token}`);
-            res = JSON.parse(res);
-            let gateway = res.url; 
-            this.emit(Events.DEBUG, `[DEBUG] Gateway: ${gateway}`);
-            gateway += `/v=${gateway_v}&encoding=json`;
-			this.ws = new WebSocket(this);
-			this.ws.connect();
-        }).catch(e => {
-        	this.destroy();
-          	console.log(e);
-          	return Promise.reject(e);
-        });
+        setTimeout(async () => {
+            if (!token || typeof token !== 'string') throw new Error('TOKEN_INVALID');
+            this.token = token;
+            global.bot_token = this.token;
+            this.auth(token);
+            var res = await requestp(endpoints.gateway);
+            return new Promise((resolve, reject) => {
+                this.emit(Events.DEBUG, `[DEBUG] Using token: ${token}`);
+                res = JSON.parse(res);
+                let gateway = res.url;
+                this.emit(Events.DEBUG, `[DEBUG] Gateway: ${gateway}`);
+                gateway += `/v=${gateway_v}&encoding=json`;
+                this.ws = new WebSocket(this);
+                this.ws.connect();
+                this.readyAt = new Date();
+                Client.bind(this);
+            }).catch(e => {
+                this.destroy();
+                console.log(e);
+                return Promise.reject(e);
+            });
+        }, 2e3)
     }
 
     auth(token) {
