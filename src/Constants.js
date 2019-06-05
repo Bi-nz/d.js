@@ -61,7 +61,7 @@ exports.Events = {
   READY: 'ready',
   RESUMED: 'resumed',
   DEBUG: 'debug',
-  WARN: 'warn',
+  WARN: 'warn'
 };
 
 exports.Status = {
@@ -70,5 +70,5 @@ exports.Status = {
   RECONNECTING: 2,
   IDLE: 3,
   NEARLY: 4,
-  DISCONNECTED: 5,
+  DISCONNECTED: 5
 };
