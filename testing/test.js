@@ -49,4 +49,4 @@ client.on('message', function(msg) {
     console.debug(packet);
 });*/
 
-client.login(config.token);
+client.login(config.token); 
