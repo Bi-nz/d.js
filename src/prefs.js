@@ -14,3 +14,7 @@ exports.API = {
     guilds: `${api}/guilds`,
     me: `${url}/users/@me`
 };
+
+exports.DiscordMethod = {
+    
+};
